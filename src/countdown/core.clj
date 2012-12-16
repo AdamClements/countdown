@@ -14,13 +14,6 @@
   (conde [(membero target options)      ; Our target is simply a number
           (== output target)]           ; available in our remaining options
 
-         [(fresh [a op b roptions]      ; Simple arithmetic on two of
-                 (membero a options)    ; the remaining options will work
-                 (rembero a options roptions)
-                 (membero b roptions)
-                 (can-calco a op b target)
-                 (== output (list op a b)))]
-
          [(fresh [a op b roptions bout] ; Some recursion required.
                  (membero a options)
                  (rembero a options roptions)
