@@ -14,13 +14,12 @@
   (conde [(membero target options)      ; Our target is simply a number
           (== output target)]           ; available in our remaining options
 
-         [(fresh [a op b roptions bout] ; Some recursion required.
-                 (membero a options)
-                 (rembero a options roptions)
+         [(fresh [a op b remaining-options suboutput]
+                 (rembero a options remaining-options)
                  (infd b (interval -10000 10000))
-                 (nested-calco b roptions bout)
+                 (nested-calco b remaining-options suboutput)
                  (can-calco a op b target)
-                 (== output (list op a bout)))]))
+                 (== output (list op a suboutput)))]))
 
 (defn play [options target]
   (let [soln (first (run 1 [output] (nested-calco target options output)))]
