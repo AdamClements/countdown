@@ -4,14 +4,13 @@ A solver for the countdown numbers game written using core.logic
 
 ## Usage
 
-    (play [5 74 2 3 9] 674)
-    Testing: (+ 5 (+ 3 (* 74 9))) => 674
-    (+ 5 (+ 3 (* 74 9)))
+    (play 674 [5 74 2 3 9])
+    => (+ 5 (+ 3 (* 74 9)))
 
-Any number of integer options may be given and any integer target,
-however if any of the intermediate calculations fall outside the range
-of -10000 .. 10000 then the program will probably miss the solution in
-all but the simplest cases.
+Any number of integer choices may be given and any integer target.
+
+It will only find exact answers, if there is no solution it will return
+nil rather than the closest calculation.
 
 This is my first core.logic program, please file an issue/pull request
 if you can suggest nicer ways of doing this and/or overcoming any of the

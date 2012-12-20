@@ -2,26 +2,30 @@
   (:require [clojure.core.logic :refer :all])
   (:refer-clojure :exclude [==]))
 
+(def all-integers (interval Integer/MIN_VALUE Integer/MAX_VALUE))
+
 (defn can-calco [a op b target]
   (conde [(+fd a b target) (== op '+)]
          [(*fd a b target) (== op '*)]
          [(-fd a b target) (== op '-)]
          [(*fd target b a) (== op '/)]))
 
-(defn nested-calco [target options output]
-  (!= options '())                      ; Run out of options, fail
+(defn reach-numbero [target choices output]
+  (!= choices '())                      ; Run out of choices, fail
 
-  (conde [(membero target options)      ; Our target is simply a number
-          (== output target)]           ; available in our remaining options
+  (conde [(membero target choices)      ; Our target is simply a number
+          (== output target)]           ; available in our remaining choices
 
-         [(fresh [a op b remaining-options suboutput]
-                 (rembero a options remaining-options)
-                 (infd b (interval -10000 10000))
-                 (nested-calco b remaining-options suboutput)
+         [(fresh [a op b remaining-choices suboutput]
+                 (rembero a choices remaining-choices)
+                 (infd b all-integers)
+                 (reach-numbero b remaining-choices suboutput)
                  (can-calco a op b target)
                  (== output (list op a suboutput)))]))
 
-(defn play [options target]
-  (let [soln (first (run 1 [output] (nested-calco target options output)))]
-    (println "Testing... " soln " => " (eval soln))
-    soln))
+(defn play
+  "Given a target integer, will attempt to arithmetically (+,-,*,/) compute it using
+   only numbers given in the array of choices at most once"
+  [target choices]
+  (first (run 1 [output]
+              (reach-numbero target choices output))))
